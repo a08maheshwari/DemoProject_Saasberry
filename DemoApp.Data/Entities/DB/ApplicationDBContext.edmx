@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="dbsbltest1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="dbsbltest1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="AccountId" />
@@ -97,6 +97,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="proc_GetAccountByPage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PageNo" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="dbsbltest1ModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountRole" EntityType="Self.AccountRole" Schema="dbo" store:Type="Tables" />
@@ -110,8 +114,7 @@
             <End Role="AccountRole" EntitySet="AccountRole" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbsbltest1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -223,7 +226,27 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountRole" EntitySet="AccountRole" />
           </AssociationSet>
+          <FunctionImport Name="proc_GetAccountByPage" ReturnType="Collection(dbsbltest1Model.proc_GetAccountByPage_Result)">
+            <Parameter Name="PageNo" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="proc_GetAccountByPage_Result">
+          <Property Type="Int32" Name="AccountId" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="Address1" Nullable="false" MaxLength="3000" />
+          <Property Type="String" Name="Address2" Nullable="false" MaxLength="3000" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="3000" />
+          <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Country" Nullable="false" MaxLength="2" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="AccountRoles" Nullable="false" />
+          <Property Type="Int64" Name="RowNo" Nullable="true" />
+          <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -297,6 +320,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="proc_GetAccountByPage" FunctionName="dbsbltest1Model.Store.proc_GetAccountByPage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbsbltest1Model.proc_GetAccountByPage_Result">
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="AccountRoles" ColumnName="AccountRoles" />
+                <ScalarProperty Name="RowNo" ColumnName="RowNo" />
+                <ScalarProperty Name="TotalRecords" ColumnName="TotalRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -9,22 +9,39 @@
 
 namespace DemoApp.Data.Entities.DB
 {
-    using Microsoft.Extensions.Configuration;
     using System;
-    using Microsoft.EntityFrameworkCore;
-
-
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
+    
     public partial class dbsbltest1Entities : DbContext
     {
-       
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        public dbsbltest1Entities()
+            : base("name=dbsbltest1Entities")
         {
-            // connect to sql server database
-            var ConnectionString = "Server=dbsbltest.database.windows.net;Database=dbsbltest1;username=dbsbltest; password=gwX7Nhy!UP3LeaKe";
-            options.UseSqlServer(ConnectionString);
         }
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<AccountRole> AccountRole { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+    
+        public virtual ObjectResult<proc_GetAccountByPage_Result> proc_GetAccountByPage(Nullable<int> pageNo, Nullable<int> pageSize)
+        {
+            var pageNoParameter = pageNo.HasValue ?
+                new ObjectParameter("PageNo", pageNo) :
+                new ObjectParameter("PageNo", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("PageSize", pageSize) :
+                new ObjectParameter("PageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_GetAccountByPage_Result>("proc_GetAccountByPage", pageNoParameter, pageSizeParameter);
+        }
     }
 }

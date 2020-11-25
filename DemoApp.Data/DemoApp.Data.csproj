@@ -188,6 +188,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApplicationDBContext.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DB\proc_GetAccountByPage_Result.cs">
+      <DependentUpon>ApplicationDBContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DB\Role.cs">
       <DependentUpon>ApplicationDBContext.tt</DependentUpon>
     </Compile>
