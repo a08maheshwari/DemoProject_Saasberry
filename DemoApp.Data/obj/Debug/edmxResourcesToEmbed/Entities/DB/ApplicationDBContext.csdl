@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbsbltest1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="AccountId" />
+    </Key>
+    <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="EZFId" Type="Int32" />
+    <Property Name="FOBId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="BlobId" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Designations" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address1" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Country" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="PostalCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Latitude" Type="Decimal" Precision="9" Scale="6" />
+    <Property Name="Longitude" Type="Decimal" Precision="9" Scale="6" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="WorkPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Company" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="StatusKey" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastModified" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="tmpLocation" Type="Int32" />
+    <Property Name="tmpRole" Type="Int32" />
+    <Property Name="BirthDate" Type="DateTime" Precision="0" />
+    <Property Name="EmergencyContactName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="EmergencyContactPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ResidencyTimeZone" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="TotalMasterCoachingHours" Type="Int32" />
+    <Property Name="CoachingCapacity" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="EmergencyContactRelationship" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsAutoBilling" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AccountRole" Relationship="Self.FK_AccountRole_Account" FromRole="Account" ToRole="AccountRole" />
+  </EntityType>
+  <EntityType Name="AccountRole">
+    <Key>
+      <PropertyRef Name="AccountRoleId" />
+    </Key>
+    <Property Name="AccountRoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountId" Type="Int32" Nullable="false" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <Property Name="IsPrimary" Type="Boolean" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_AccountRole_Account" FromRole="AccountRole" ToRole="Account" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_AccountRole_Role" FromRole="AccountRole" ToRole="Role" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Priority" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="AccountRole" Relationship="Self.FK_AccountRole_Role" FromRole="Role" ToRole="AccountRole" />
+  </EntityType>
+  <Association Name="FK_AccountRole_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AccountRole" Type="Self.AccountRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="AccountRole">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountRole_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AccountRole" Type="Self.AccountRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="AccountRole">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="dbsbltest1Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Account" EntityType="Self.Account" />
+    <EntitySet Name="AccountRole" EntityType="Self.AccountRole" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <AssociationSet Name="FK_AccountRole_Account" Association="Self.FK_AccountRole_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="AccountRole" EntitySet="AccountRole" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountRole_Role" Association="Self.FK_AccountRole_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="AccountRole" EntitySet="AccountRole" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,112 @@
+﻿<div class="clearfix"></div>
+
+@if (ViewBag.Clist.Count > 0)
+{
+    <input type="hidden" id="hdnlstCount" value="@ViewBag.Alist.Count" />
+    <input type="hidden" id="hdntotalCount" value="@ViewBag.AccountListCount" />
+    <div class="text-right col-row mar-t-10 pad-b-5">
+        Showing <strong><span id="spanlstCount">@ViewBag.Clist.Count</span></strong> out of <strong>@ViewBag.ClientListCount </strong>
+        @if (ViewBag.Clist.Count == 1)
+        {
+            @:record
+        }
+        else
+        {
+            @:records
+        }
+    </div>
+}
+
+
+
+@Html.Partial("_AccountList")
+
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.tablesorter.js?v=2019"></script>
+    <script src="~/Scripts/jquery.tablesorter.widgets.js?v=2019"></script>
+    <script src="~/Scripts/jquery.mCustomScrollbar.concat.min.js?v=2019"></script>
+    <link rel="stylesheet" href="~/Content/css/jquery.mCustomScrollbar.css">
+    @*<script src="~/Scripts/pages/loadmoreScroll.js"></script>*@
+    <script>
+   
+          $(function () {
+            $(window).scroll(function () {
+                if ($(window).scrollTop() >= ($(document).height() - $(window).height() - 10)) {
+                    setTimeout(function () {
+                        if (parseInt($("#hdntotalCount").val()) > parseInt($("#hdnlstCount").val())) {
+                            $("#btnLoadmore").show();
+                            LoadMoreAccounts();
+                        }
+                    }, 2000);
+                }
+            });
+         
+            $("#tblAccounts").tablesorter({
+                sortList: [[0, 0]],
+                selectorHeaders: 'thead th, thead td',
+                widgets: ['stickyHeaders'],
+                widgetOptions: {
+                    stickyHeaders_offset: 60
+                }
+            });
+        });
+        $("#btnLoadmore").click(function () {
+            LoadMoreAccounts();
+        });
+        function LoadMoreAccounts() {
+           
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("ClientLoadMore", "Clients")',
+                data: { "hdnClientCount": hdnClientCount, "Name": Name, "ClientId": ClientId, "CostCenter": CostCenter, "StateSearch": State, "ClientStatus": ClientStatus, "flag": "True", FundingProfileId: fundingsourceid  },
+                async: false,
+                beforeSend: function (xyz) {
+                    $("#Loader").show();
+                },
+                success: function (data, status, xhr) {
+                    var ct = xhr.getResponseHeader("content-type") || "";
+                    if (ct.indexOf('html') > -1) {
+                    alert(xhr.status);
+                    }
+                    else {
+                    $("#btnLoadmore").hide();
+                    var lstcount = data.length;
+                    var hdnCount = $("#hdnlstCount").val();
+                    var NewLstCount = parseInt(lstcount) + parseInt(hdnCount);
+                    $("#hdnlstCount").val(NewLstCount);
+                        $("#spanlstCount").text(NewLstCount);
+                    for (var i = 0; i < data.length; i++) {
+                        var trHtml = "";
+                        if (data[i] != '') {
+                            trHtml += "<tr style='cursor:pointer' onclick='GetDetail(" + data[i].ClientId + ")'><td>" + data[i].ClientName + "</td><td>" + data[i].ClientNumber + "</td><td>" + data[i].State + "</td><td>" + data[i].Region + "</td><td>" + data[i].CostCenterName + "</td><td>" + data[i].ClientStatus + "</td></tr>";
+                            $(trHtml).appendTo("#tblClient tbody");
+
+                        }
+                    }
+                    $("#tblClient").trigger("update");
+                    //var sorting = [[0, 0]];
+                    //$("#tblFunding").trigger("sorton", [sorting]);
+
+                    var itemCount = parseInt(data.length) + parseInt(hdnClientCount);
+                    $("#hdnClient").val(itemCount);
+                    $("#Loader").hide();
+                    //$("#tblFunding").tablesorter();
+                }
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        }
+      
+        $("#btnCancel").click(function () {
+            $('#loading-pane').show();
+            window.location.href = "/Accounts/AccountsList";
+        });
+    </script>
+    <script src="~/Scripts/pages/InnerFunctions.js?v=2019"></script>
+}

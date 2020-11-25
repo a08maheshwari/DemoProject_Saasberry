@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbsbltest1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="AccountId" />
+    </Key>
+    <Property Name="AccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="varchar" MaxLength="128" />
+    <Property Name="EZFId" Type="int" />
+    <Property Name="FOBId" Type="nvarchar" MaxLength="200" />
+    <Property Name="BlobId" Type="int" />
+    <Property Name="Title" Type="nvarchar" MaxLength="500" />
+    <Property Name="Designations" Type="nvarchar" MaxLength="1500" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Address1" Type="nvarchar" MaxLength="3000" />
+    <Property Name="Address2" Type="nvarchar" MaxLength="3000" />
+    <Property Name="City" Type="nvarchar" MaxLength="3000" />
+    <Property Name="Province" Type="nvarchar" MaxLength="10" />
+    <Property Name="Country" Type="char" MaxLength="2" />
+    <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+    <Property Name="Latitude" Type="decimal" Precision="9" Scale="6" />
+    <Property Name="Longitude" Type="decimal" Precision="9" Scale="6" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Mobile" Type="varchar" MaxLength="50" />
+    <Property Name="WorkPhone" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Email2" Type="nvarchar" MaxLength="500" />
+    <Property Name="Company" Type="nvarchar" MaxLength="2000" />
+    <Property Name="Gender" Type="char" MaxLength="1" />
+    <Property Name="StatusKey" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="LastModified" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="StartDate" Type="datetime" />
+    <Property Name="tmpLocation" Type="int" />
+    <Property Name="tmpRole" Type="int" />
+    <Property Name="BirthDate" Type="date" />
+    <Property Name="EmergencyContactName" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmergencyContactPhoneNumber" Type="varchar" MaxLength="50" />
+    <Property Name="ResidencyTimeZone" Type="nvarchar" MaxLength="500" />
+    <Property Name="TotalMasterCoachingHours" Type="int" />
+    <Property Name="CoachingCapacity" Type="numeric" Precision="10" Scale="2" />
+    <Property Name="EmergencyContactRelationship" Type="nvarchar" MaxLength="20" />
+    <Property Name="IsAutoBilling" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountRole">
+    <Key>
+      <PropertyRef Name="AccountRoleId" />
+    </Key>
+    <Property Name="AccountRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountId" Type="int" Nullable="false" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
+    <Property Name="IsPrimary" Type="bit" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Priority" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AccountRole_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AccountRole" Type="Self.AccountRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="AccountRole">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountRole_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AccountRole" Type="Self.AccountRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="AccountRole">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="dbsbltest1ModelStoreContainer">
+    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountRole" EntityType="Self.AccountRole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AccountRole_Account" Association="Self.FK_AccountRole_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="AccountRole" EntitySet="AccountRole" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountRole_Role" Association="Self.FK_AccountRole_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="AccountRole" EntitySet="AccountRole" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
