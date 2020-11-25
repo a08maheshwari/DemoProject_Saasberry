@@ -16,18 +16,11 @@ namespace DemoApp.Data.Entities.DB
 
     public partial class dbsbltest1Entities : DbContext
     {
-        protected readonly IConfiguration Configuration;
-
-        public dbsbltest1Entities(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
        
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // connect to sql server database
-            var ConnectionString = this.Configuration.GetSection("ConnectionStrings").Value;
+            var ConnectionString = "Server=dbsbltest.database.windows.net;Database=dbsbltest1;username=dbsbltest; password=gwX7Nhy!UP3LeaKe";
             options.UseSqlServer(ConnectionString);
         }
         public virtual DbSet<Account> Account { get; set; }
