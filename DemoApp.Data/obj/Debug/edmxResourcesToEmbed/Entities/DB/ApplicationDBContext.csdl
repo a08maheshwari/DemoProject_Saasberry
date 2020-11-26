@@ -108,5 +108,39 @@
       <End Role="Role" EntitySet="Role" />
       <End Role="AccountRole" EntitySet="AccountRole" />
     </AssociationSet>
+    <FunctionImport Name="proc_GetAccountByPage" ReturnType="Collection(dbsbltest1Model.proc_GetAccountByPage_Result)">
+      <Parameter Name="PageNo" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="AccountWaiver" EntityType="dbsbltest1Model.AccountWaiver" />
   </EntityContainer>
+  <ComplexType Name="proc_GetAccountByPage_Result">
+    <Property Type="Int32" Name="AccountId" Nullable="false" />
+    <Property Type="String" Name="FirstName" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="LastName" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="Mobile" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="Address1" Nullable="false" MaxLength="3000" />
+    <Property Type="String" Name="Address2" Nullable="false" MaxLength="3000" />
+    <Property Type="String" Name="City" Nullable="false" MaxLength="3000" />
+    <Property Type="String" Name="PostalCode" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Country" Nullable="false" MaxLength="2" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="AccountRoles" Nullable="false" />
+    <Property Type="Int64" Name="RowNo" Nullable="true" />
+    <Property Type="Int32" Name="TotalRecords" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="AccountWaiver">
+    <Key>
+      <PropertyRef Name="AccountWaiverId" />
+    </Key>
+    <Property Name="AccountWaiverId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountId" Type="Int32" Nullable="false" />
+    <Property Name="SignatureBlobId" Type="Int32" Nullable="false" />
+    <Property Name="WaiverId" Type="Int32" Nullable="false" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="PackageId" Type="Int32" />
+    <Property Name="EventId" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
 </Schema>

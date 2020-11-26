@@ -10,15 +10,21 @@ namespace SaasBerry_DemoApplication.Controllers
     public class AccountsController : Controller
     {
         private dbsbltest1Entities dbContext;
+        public AccountsController(dbsbltest1Entities _dbContext)
+        {
+            dbContext = _dbContext;
+        }
         public IActionResult AccountList()
         {
             var totalRec = 0;
-            var AccountList = dbContext.proc_GetAccountByPage(1,10);
+            var AccountList = dbContext.Account.ToList();
+
+           // var AccountList = dbContext.proc_GetAccountByPage(1, 10);
             ViewBag.Alist = AccountList;
             ViewBag.AccountListCount = totalRec;
             return View();
         }
-
+    }
     //    public ActionResult AccountLoadMore(int? accountCount)
     //    {
     //                    var totalRec = 0;

@@ -52,7 +52,7 @@ namespace SaasBerry_DemoApplicatiom
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Accounts}/{action=AccountList}/{id?}");
             });
         }
     }

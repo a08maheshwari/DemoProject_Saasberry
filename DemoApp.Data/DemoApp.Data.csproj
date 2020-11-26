@@ -173,6 +173,9 @@
     <Compile Include="Entities\DB\AccountRole.cs">
       <DependentUpon>ApplicationDBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DB\AccountWaiver.cs">
+      <DependentUpon>ApplicationDBContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DB\ApplicationDBContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

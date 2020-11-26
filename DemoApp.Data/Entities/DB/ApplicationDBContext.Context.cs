@@ -10,26 +10,27 @@
 namespace DemoApp.Data.Entities.DB
 {
     using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
+    using System.Data.Entity.Infrastructure;
     using System.Linq;
-    
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.SqlServer;
+
     public partial class dbsbltest1Entities : DbContext
     {
-        public dbsbltest1Entities()
-            : base("name=dbsbltest1Entities")
+        public dbsbltest1Entities() : base(GetOptions())
         {
         }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        private static DbContextOptions GetOptions()
         {
-            throw new UnintentionalCodeFirstException();
+            return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), "dbsbltest1Entities").Options;
         }
+       
     
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<AccountRole> AccountRole { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<AccountWaiver> AccountWaiver { get; set; }
     
         public virtual ObjectResult<proc_GetAccountByPage_Result> proc_GetAccountByPage(Nullable<int> pageNo, Nullable<int> pageSize)
         {

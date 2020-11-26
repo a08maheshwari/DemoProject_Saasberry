@@ -56,6 +56,19 @@
     <Property Name="CreatedBy" Type="int" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="AccountWaiver">
+    <Key>
+      <PropertyRef Name="AccountWaiverId" />
+    </Key>
+    <Property Name="AccountWaiverId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountId" Type="int" Nullable="false" />
+    <Property Name="SignatureBlobId" Type="int" Nullable="false" />
+    <Property Name="WaiverId" Type="int" Nullable="false" />
+    <Property Name="OrderId" Type="int" />
+    <Property Name="PackageId" Type="int" />
+    <Property Name="EventId" Type="int" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="RoleId" />
@@ -92,9 +105,14 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="proc_GetAccountByPage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNo" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="dbsbltest1ModelStoreContainer">
     <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AccountRole" EntityType="Self.AccountRole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountWaiver" EntityType="Self.AccountWaiver" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_AccountRole_Account" Association="Self.FK_AccountRole_Account">
       <End Role="Account" EntitySet="Account" />

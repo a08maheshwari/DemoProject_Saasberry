@@ -10,6 +10,7 @@
         <EntityTypeShape EntityType="dbsbltest1Model.Role" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <AssociationConnector Association="dbsbltest1Model.FK_AccountRole_Account" ManuallyRouted="false" />
         <AssociationConnector Association="dbsbltest1Model.FK_AccountRole_Role" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="dbsbltest1Model.AccountWaiver" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

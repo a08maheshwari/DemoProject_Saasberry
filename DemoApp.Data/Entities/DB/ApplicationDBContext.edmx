@@ -61,6 +61,19 @@
           <Property Name="CreatedBy" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="AccountWaiver">
+          <Key>
+            <PropertyRef Name="AccountWaiverId" />
+          </Key>
+          <Property Name="AccountWaiverId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="int" Nullable="false" />
+          <Property Name="SignatureBlobId" Type="int" Nullable="false" />
+          <Property Name="WaiverId" Type="int" Nullable="false" />
+          <Property Name="OrderId" Type="int" />
+          <Property Name="PackageId" Type="int" />
+          <Property Name="EventId" Type="int" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="RoleId" />
@@ -104,6 +117,7 @@
         <EntityContainer Name="dbsbltest1ModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountRole" EntityType="Self.AccountRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountWaiver" EntityType="Self.AccountWaiver" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AccountRole_Account" Association="Self.FK_AccountRole_Account">
             <End Role="Account" EntitySet="Account" />
@@ -230,6 +244,7 @@
             <Parameter Name="PageNo" Mode="In" Type="Int32" />
             <Parameter Name="PageSize" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="AccountWaiver" EntityType="dbsbltest1Model.AccountWaiver" />
         </EntityContainer>
         <ComplexType Name="proc_GetAccountByPage_Result">
           <Property Type="Int32" Name="AccountId" Nullable="false" />
@@ -247,6 +262,19 @@
           <Property Type="Int64" Name="RowNo" Nullable="true" />
           <Property Type="Int32" Name="TotalRecords" Nullable="true" />
         </ComplexType>
+        <EntityType Name="AccountWaiver">
+          <Key>
+            <PropertyRef Name="AccountWaiverId" />
+          </Key>
+          <Property Name="AccountWaiverId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int32" Nullable="false" />
+          <Property Name="SignatureBlobId" Type="Int32" Nullable="false" />
+          <Property Name="WaiverId" Type="Int32" Nullable="false" />
+          <Property Name="OrderId" Type="Int32" />
+          <Property Name="PackageId" Type="Int32" />
+          <Property Name="EventId" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -340,6 +368,20 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="AccountWaiver">
+            <EntityTypeMapping TypeName="dbsbltest1Model.AccountWaiver">
+              <MappingFragment StoreEntitySet="AccountWaiver">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="WaiverId" ColumnName="WaiverId" />
+                <ScalarProperty Name="SignatureBlobId" ColumnName="SignatureBlobId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="AccountWaiverId" ColumnName="AccountWaiverId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
