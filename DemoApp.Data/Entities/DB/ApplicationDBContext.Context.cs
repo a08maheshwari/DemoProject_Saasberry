@@ -10,29 +10,38 @@
 namespace DemoApp.Data.Entities.DB
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Infrastructure;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.SqlServer;
 
     public partial class dbsbltest1Entities : DbContext
     {
-        public dbsbltest1Entities() : base(GetOptions())
+        //public dbsbltest1Entities() : base(GetOptions())
+        //{
+        //}
+        //private static DbContextOptions GetOptions()
+        //{
+        //    return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), "dbsbltest1Entities").Options;
+        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
+            // connect to sql server database
+            var ConnectionString = "Server=dbsbltest.database.windows.net;Database=dbsbltest1;user id=dbsbltest; password=gwX7Nhy!UP3LeaKe;";
+            options.UseSqlServer(ConnectionString);
         }
-        private static DbContextOptions GetOptions()
-        {
-            return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), "dbsbltest1Entities").Options;
-        }
-       
-    
+
+
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<AccountRole> AccountRole { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<AccountWaiver> AccountWaiver { get; set; }
     
-        public virtual ObjectResult<proc_GetAccountByPage_Result> proc_GetAccountByPage(Nullable<int> pageNo, Nullable<int> pageSize)
+        public virtual ObjectResult<proc_GetAccountByPage_Result> proc_GetAccountByPage(Nullable<int> pageNo, Nullable<int> pageSize, dbsbltest1Entities contextObj)
         {
             var pageNoParameter = pageNo.HasValue ?
                 new ObjectParameter("PageNo", pageNo) :
@@ -41,8 +50,34 @@ namespace DemoApp.Data.Entities.DB
             var pageSizeParameter = pageSize.HasValue ?
                 new ObjectParameter("PageSize", pageSize) :
                 new ObjectParameter("PageSize", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_GetAccountByPage_Result>("proc_GetAccountByPage", pageNoParameter, pageSizeParameter);
+            var result = (IObjectContextAdapter)contextObj;
+            return (contextObj as IObjectContextAdapter).ObjectContext.ExecuteFunction<proc_GetAccountByPage_Result>("proc_GetAccountByPage", pageNoParameter, pageSizeParameter);
+        }
+
+       
+        public List<Account> GetProductByIDAsync(int pageNo, int pageSize)
+        {
+            // Initialization.  
+            List<Account> lst = new List<Account>();
+
+            try
+            {
+                // Settings.  
+                SqlParameter usernameParam = new SqlParameter("@PageNo", pageNo);
+                SqlParameter pageSizeParam = new SqlParameter("@PageSize", pageSize);
+
+                // Processing.  
+                string sqlQuery = "EXEC [dbo].[proc_GetAccountByPage] ";
+
+                var olst =  this.Set<proc_GetAccountByPage_Result>().FromSqlRaw(sqlQuery).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            // Info.  
+            return lst;
         }
     }
 }
